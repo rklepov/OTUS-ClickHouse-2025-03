@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  clickhouse-01:
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    user: "0:0"
+    container_name: clickhouse-01
+    networks:
+      - net
+    hostname: clickhouse-01
+    volumes:
+      - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-backup/config.yml:/etc/clickhouse-backup/config.yml:Z
+    ports:
+      - "0.0.0.0:18123:8123"
+      - "0.0.0.0:19000:9000"
+    depends_on:
+      - minio-s3
+
+  minio-s3:
+    image: "quay.io/minio/minio"
+    container_name: minio-s3
+    networks:
+      - net
+    hostname: minio-s3
+    command: ["server", "/data", "--console-address", ":9001"]
+    volumes:
+      - s3:/data:Z
+    ports:
+      - "0.0.0.0:19090:9000"
+      - "0.0.0.0:19091:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minio}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-miniosecret}
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  s3:
