@@ -1,0 +1,70 @@
+SELECT
+    payment_type,
+    count(*) AS total_trips,
+    sum(passenger_count) AS total_passengers,
+    round(avg(total_amount), 2) AS avg_price,
+    round(avg(trip_distance), 2) AS avg_distance
+FROM nyc_taxi.trips_small
+WHERE (dropoff_datetime >= toDateTime('2015-07-01')) AND (dropoff_datetime <= toDateTime('2015-08-01'))
+GROUP BY payment_type
+ORDER BY payment_type ASC
+SETTINGS send_logs_level = 'trace'
+
+Query id: 2c5706fe-601b-48f2-b29e-88df9959d6c4
+
+[3e16fa9ca9d8] 2025.06.23 08:10:59.175256 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> executeQuery: (from [::1]:58530) (query 1, line 1) SELECT payment_type, count(*) AS total_trips, sum(passenger_count) AS total_passengers, round(avg(total_amount), 2) AS avg_price, round(avg(trip_distance), 2) AS avg_distance FROM nyc_taxi.trips_small WHERE (dropoff_datetime >= toDateTime('2015-07-01')) AND (dropoff_datetime <= toDateTime('2015-08-01')) GROUP BY payment_type ORDER BY payment_type ASC SETTINGS send_logs_level = 'trace' (stage: Complete)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.177487 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Planner: Query to stage Complete
+[3e16fa9ca9d8] 2025.06.23 08:10:59.177781 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Planner: Query from stage FetchColumns to stage Complete
+[3e16fa9ca9d8] 2025.06.23 08:10:59.178354 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Aggregator: Adjusting memory limit before external aggregation with 3.20 GiB (ratio: 0.5, available system memory: 6.40 GiB)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.178550 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> SortingStep: Adjusting memory limit before external sort with 3.20 GiB (ratio: 0.5, available system memory: 6.40 GiB)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.179251 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryPlanOptimizePrewhere: The min valid primary key position for moving to the tail of PREWHERE is -1
+[3e16fa9ca9d8] 2025.06.23 08:10:59.179349 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryPlanOptimizePrewhere: Moved 2 conditions to PREWHERE
+[3e16fa9ca9d8] 2025.06.23 08:10:59.179813 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> IInterpreterUnionOrSelectQuery: The new analyzer is enabled, but the old interpreter is used. It can be a bug, please report it. Will disable 'allow_experimental_analyzer' setting (for query: SELECT min(pickup_datetime), max(pickup_datetime), count() SETTINGS aggregate_functions_null_for_empty = false, transform_null_in = false, legacy_column_name_of_tuple_literal = false)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.180887 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Key condition: (column 1 in [1435708800, +Inf)), (column 1 in (-Inf, 1438387200]), and
+[3e16fa9ca9d8] 2025.06.23 08:10:59.181073 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Filtering marks by primary and secondary keys
+[3e16fa9ca9d8] 2025.06.23 08:10:59.181851 [ 914 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Used generic exclusion search over index for part all_1_1_0 with 193 steps
+[3e16fa9ca9d8] 2025.06.23 08:10:59.182918 [ 919 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Used generic exclusion search over index for part all_2_2_0 with 191 steps
+[3e16fa9ca9d8] 2025.06.23 08:10:59.189162 [ 914 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Used generic exclusion search over index for part all_3_3_0 with 150 steps
+[3e16fa9ca9d8] 2025.06.23 08:10:59.189779 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryConditionCache: Read entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_1_1_0, condition_hash: 13672339731284339750
+[3e16fa9ca9d8] 2025.06.23 08:10:59.190119 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryConditionCache: Read entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_2_2_0, condition_hash: 13672339731284339750
+[3e16fa9ca9d8] 2025.06.23 08:10:59.190352 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryConditionCache: Read entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_3_3_0, condition_hash: 13672339731284339750
+[3e16fa9ca9d8] 2025.06.23 08:10:59.190467 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Query condition cache has dropped 296/368 granules for PREWHERE condition and(greaterOrEquals(__table1.dropoff_datetime, _CAST(1435708800_DateTime, 'DateTime'_String)), lessOrEquals(__table1.dropoff_datetime, _CAST(1438387200_DateTime, 'DateTime'_String))).
+[3e16fa9ca9d8] 2025.06.23 08:10:59.190595 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> QueryConditionCache: Could not find entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_1_1_0, condition_hash: 15520645065664880444
+[3e16fa9ca9d8] 2025.06.23 08:10:59.190687 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> QueryConditionCache: Could not find entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_2_2_0, condition_hash: 15520645065664880444
+[3e16fa9ca9d8] 2025.06.23 08:10:59.190792 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Query condition cache has dropped 0/72 granules for WHERE condition and(greaterOrEquals(dropoff_datetime, _CAST(1435708800_DateTime, 'DateTime'_String)), lessOrEquals(dropoff_datetime, _CAST(1438387200_DateTime, 'DateTime'_String))).
+[3e16fa9ca9d8] 2025.06.23 08:10:59.191245 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Selected 3/3 parts by partition key, 2 parts by primary key, 368/368 marks by primary key, 72 marks to read from 2 ranges
+[3e16fa9ca9d8] 2025.06.23 08:10:59.191483 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Spreading mark ranges among streams (default reading)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.192318 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Reading approx. 589824 rows with 3 streams
+[3e16fa9ca9d8] 2025.06.23 08:10:59.192581 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:10:59.192769 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:10:59.193183 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:10:59.199584 [ 898 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:10:59.199671 [ 898 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> HashTablesStatistics: An entry for key=13911761629817995060 found in cache: sum_of_sizes=12, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:10:59.199740 [ 898 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:10:59.199840 [ 920 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:10:59.199886 [ 920 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> HashTablesStatistics: An entry for key=13911761629817995060 found in cache: sum_of_sizes=12, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:10:59.199914 [ 920 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:10:59.202153 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:10:59.202240 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> HashTablesStatistics: An entry for key=13911761629817995060 found in cache: sum_of_sizes=12, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:10:59.202355 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:10:59.208198 [ 898 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 13672339731284339750, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:10:59.208387 [ 898 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 196608, step 1 rows_read: 196608
+[3e16fa9ca9d8] 2025.06.23 08:10:59.208485 [ 898 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> AggregatingTransform: Aggregated. 196608 to 4 rows (from 1.88 MiB) in 0.014935586 sec. (13163728.561 rows/sec., 125.54 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.210712 [ 920 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 13672339731284339750, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:10:59.210974 [ 920 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 196608, step 1 rows_read: 196608
+[3e16fa9ca9d8] 2025.06.23 08:10:59.211053 [ 920 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> AggregatingTransform: Aggregated. 192673 to 4 rows (from 1.84 MiB) in 0.017516779 sec. (10999339.548 rows/sec., 104.90 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.214105 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 13672339731284339750, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:10:59.214292 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 196608, step 1 rows_read: 196608
+[3e16fa9ca9d8] 2025.06.23 08:10:59.214395 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> AggregatingTransform: Aggregated. 188843 to 4 rows (from 1.80 MiB) in 0.020811098 sec. (9074148.803 rows/sec., 86.54 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:10:59.214440 [ 851 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Trace> Aggregator: Merging aggregated data
+[3e16fa9ca9d8] 2025.06.23 08:10:59.219359 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> executeQuery: Read 589824 rows, 7.88 MiB in 0.046199 sec., 12767029.589385053 rows/sec., 170.46 MiB/sec.
+[3e16fa9ca9d8] 2025.06.23 08:10:59.220445 [ 79 ] {2c5706fe-601b-48f2-b29e-88df9959d6c4} <Debug> MemoryTracker: Query peak memory usage: 803.23 KiB.
+   ┌─payment_type─┬─total_trips─┬─total_passengers─┬─avg_price─┬─avg_distance─┐
+1. │ CSH          │      356924 │           596222 │     17.69 │         3.74 │
+2. │ CRE          │      218553 │           382107 │     13.53 │         2.78 │
+3. │ NOC          │        1978 │             2518 │      13.6 │         3.18 │
+4. │ DIS          │         669 │              875 │     12.69 │         2.78 │
+   └──────────────┴─────────────┴──────────────────┴───────────┴──────────────┘
+
+4 rows in set. Elapsed: 0.046 sec. Processed 589.82 thousand rows, 8.26 MB (12.79 million rows/s., 179.13 MB/s.)
+Peak memory usage: 803.23 KiB.

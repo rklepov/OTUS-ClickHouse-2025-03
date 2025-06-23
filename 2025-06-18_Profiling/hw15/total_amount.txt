@@ -1,0 +1,87 @@
+SELECT
+    payment_type,
+    count(*) AS total_trips,
+    sum(passenger_count) AS total_passengers,
+    round(avg(total_amount), 2) AS avg_price,
+    round(avg(trip_distance), 2) AS avg_distance
+FROM nyc_taxi.trips_small
+WHERE total_amount > 50
+GROUP BY payment_type
+ORDER BY payment_type ASC
+SETTINGS send_logs_level = 'trace'
+
+Query id: 1743ccf1-12bc-42c2-914a-9794f7b42e41
+
+[3e16fa9ca9d8] 2025.06.23 08:40:40.761715 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> executeQuery: (from [::1]:58530) (query 1, line 1) select payment_type, count(*) total_trips, sum(passenger_count) total_passengers, round(avg(total_amount),2) avg_price, round(avg(trip_distance), 2) avg_distance from nyc_taxi.trips_small where total_amount > 50 group by payment_type order by payment_type settings send_logs_level='trace' (stage: Complete)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.763182 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Planner: Query to stage Complete
+[3e16fa9ca9d8] 2025.06.23 08:40:40.763447 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Planner: Query from stage FetchColumns to stage Complete
+[3e16fa9ca9d8] 2025.06.23 08:40:40.763789 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Aggregator: Adjusting memory limit before external aggregation with 3.20 GiB (ratio: 0.5, available system memory: 6.41 GiB)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.763873 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> SortingStep: Adjusting memory limit before external sort with 3.20 GiB (ratio: 0.5, available system memory: 6.41 GiB)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.764172 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryPlanOptimizePrewhere: The min valid primary key position for moving to the tail of PREWHERE is -1
+[3e16fa9ca9d8] 2025.06.23 08:40:40.764198 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryPlanOptimizePrewhere: Moved 1 conditions to PREWHERE
+[3e16fa9ca9d8] 2025.06.23 08:40:40.764392 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> IInterpreterUnionOrSelectQuery: The new analyzer is enabled, but the old interpreter is used. It can be a bug, please report it. Will disable 'allow_experimental_analyzer' setting (for query: SELECT min(pickup_datetime), max(pickup_datetime), count() SETTINGS aggregate_functions_null_for_empty = false, transform_null_in = false, legacy_column_name_of_tuple_literal = false)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.764815 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Key condition: unknown
+[3e16fa9ca9d8] 2025.06.23 08:40:40.764893 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Filtering marks by primary and secondary keys
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769354 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Read entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_1_1_0, condition_hash: 10240948498319282486
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769434 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Read entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_2_2_0, condition_hash: 10240948498319282486
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769472 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Read entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_3_3_0, condition_hash: 10240948498319282486
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769506 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Query condition cache has dropped 0/368 granules for PREWHERE condition greater(__table1.total_amount, 50_UInt8).
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769564 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> QueryConditionCache: Could not find entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_1_1_0, condition_hash: 9878998397262599335
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769594 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> QueryConditionCache: Could not find entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_2_2_0, condition_hash: 9878998397262599335
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769614 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> QueryConditionCache: Could not find entry for table_uuid: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part: all_3_3_0, condition_hash: 9878998397262599335
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769651 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Query condition cache has dropped 0/368 granules for WHERE condition greater(total_amount, 50_UInt8).
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769690 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Selected 3/3 parts by partition key, 3 parts by primary key, 368/368 marks by primary key, 368 marks to read from 3 ranges
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769730 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Spreading mark ranges among streams (default reading)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769904 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> nyc_taxi.trips_small (d54e7c83-f651-4bef-b9ac-2b4dc1911881) (SelectExecutor): Reading approx. 3000317 rows with 4 streams
+[3e16fa9ca9d8] 2025.06.23 08:40:40.769968 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:40:40.770043 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:40:40.770108 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:40:40.770149 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: PREWHERE condition was split into 1 steps
+[3e16fa9ca9d8] 2025.06.23 08:40:40.774984 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:40:40.775053 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> HashTablesStatistics: An entry for key=11718329736959977042 found in cache: sum_of_sizes=16, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:40:40.775084 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:40:40.782705 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:40:40.782913 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> HashTablesStatistics: An entry for key=11718329736959977042 found in cache: sum_of_sizes=16, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:40:40.782704 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:40:40.783042 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:40:40.783086 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> HashTablesStatistics: An entry for key=11718329736959977042 found in cache: sum_of_sizes=16, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:40:40.783201 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:40:40.786802 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_3_3_0, condition_hash: 10240948498319282486, condition: , marks_count: 100, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.788986 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 10240948498319282486, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.792775 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregating
+[3e16fa9ca9d8] 2025.06.23 08:40:40.792884 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> HashTablesStatistics: An entry for key=11718329736959977042 found in cache: sum_of_sizes=16, median_size=4
+[3e16fa9ca9d8] 2025.06.23 08:40:40.792932 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Aggregator: Aggregation method: key8
+[3e16fa9ca9d8] 2025.06.23 08:40:40.797667 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 10240948498319282486, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.799190 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 10240948498319282486, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.800428 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 10240948498319282486, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.804817 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_3_3_0, condition_hash: 10240948498319282486, condition: , marks_count: 100, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.808163 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 10240948498319282486, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.810050 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 10240948498319282486, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.812879 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 10240948498319282486, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.813130 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 10240948498319282486, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.810064 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_3_3_0, condition_hash: 10240948498319282486, condition: , marks_count: 100, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.817178 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 10240948498319282486, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.818790 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 10240948498319282486, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.818986 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 497553, step 1 rows_read: 497553
+[3e16fa9ca9d8] 2025.06.23 08:40:40.819046 [ 805 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregated. 20355 to 4 rows (from 198.78 KiB) in 0.048597574 sec. (418848.068 rows/sec., 3.99 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.824543 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_2_2_0, condition_hash: 10240948498319282486, condition: , marks_count: 134, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.824793 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 753664, step 1 rows_read: 753664
+[3e16fa9ca9d8] 2025.06.23 08:40:40.824869 [ 734 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregated. 30936 to 4 rows (from 302.11 KiB) in 0.054452538 sec. (568127.789 rows/sec., 5.42 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.825441 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_3_3_0, condition_hash: 10240948498319282486, condition: , marks_count: 100, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.825559 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 803598, step 1 rows_read: 803598
+[3e16fa9ca9d8] 2025.06.23 08:40:40.825600 [ 835 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregated. 33325 to 4 rows (from 325.44 KiB) in 0.055202121 sec. (603690.572 rows/sec., 5.76 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.829551 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> QueryConditionCache: Updated entry for table_id: d54e7c83-f651-4bef-b9ac-2b4dc1911881, part_name: all_1_1_0, condition_hash: 10240948498319282486, condition: , marks_count: 137, has_final_mark: true
+[3e16fa9ca9d8] 2025.06.23 08:40:40.829691 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> MergeTreeSelectProcessor: Read steps statistics: step 0 rows_read: 945502, step 1 rows_read: 945502
+[3e16fa9ca9d8] 2025.06.23 08:40:40.829722 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> AggregatingTransform: Aggregated. 37863 to 4 rows (from 369.76 KiB) in 0.059291494 sec. (638590.756 rows/sec., 6.09 MiB/sec.)
+[3e16fa9ca9d8] 2025.06.23 08:40:40.829735 [ 864 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Trace> Aggregator: Merging aggregated data
+[3e16fa9ca9d8] 2025.06.23 08:40:40.836328 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> executeQuery: Read 3000317 rows, 28.61 MiB in 0.075133 sec., 39933411.417087026 rows/sec., 380.83 MiB/sec.
+[3e16fa9ca9d8] 2025.06.23 08:40:40.837157 [ 79 ] {1743ccf1-12bc-42c2-914a-9794f7b42e41} <Debug> MemoryTracker: Query peak memory usage: 1.31 MiB.
+   ┌─payment_type─┬─total_trips─┬─total_passengers─┬─avg_price─┬─avg_distance─┐
+1. │ CSH          │       87276 │           149293 │     67.47 │        16.15 │
+2. │ CRE          │       34259 │            65314 │     63.85 │        17.54 │
+3. │ NOC          │         744 │             1051 │     69.17 │        10.48 │
+4. │ DIS          │         200 │              275 │     62.52 │        11.41 │
+   └──────────────┴─────────────┴──────────────────┴───────────┴──────────────┘
+
+4 rows in set. Elapsed: 0.073 sec. Processed 3.00 million rows, 30.00 MB (40.94 million rows/s., 409.37 MB/s.)
+Peak memory usage: 1.31 MiB.
