@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  postgres-src:
+    image: postgres:latest
+    restart: always
+    hostname: src-pg
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "0.0.0.0:15432:5432"
+    volumes:
+      - src_db:/var/lib/postgresql/data
+      - ${PWD}/fs/volumes/postgres/import:/import:Z
+      - ${PWD}/fs/volumes/postgres/data/postgresql.conf:/var/lib/postgresql/data/postgresql.conf:Z
+
+  clickhouse-dst:
+    image: "clickhouse/clickhouse-server:latest"
+    user: "0:0"
+    hostname: dst-ch
+
+    volumes:
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
+    ports:
+      - "0.0.0.0:18123:8123"
+      - "0.0.0.0:19000:9000"
+
+volumes:
+  src_db:
+    driver: local
