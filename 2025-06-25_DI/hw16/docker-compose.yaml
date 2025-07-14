@@ -19,8 +19,8 @@ services:
     image: "clickhouse/clickhouse-server:latest"
     user: "0:0"
     hostname: dst-ch
-
     volumes:
+      - dst_db:/var/lib/clickhouse
       - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
       - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
     ports:
@@ -29,4 +29,6 @@ services:
 
 volumes:
   src_db:
+    driver: local
+  dst_db:
     driver: local
