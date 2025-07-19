@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:latest
+    command: -c config_file=/etc/postgresql/postgresql.conf
+    restart: always
+    hostname: postgres-host
+    networks:
+      - net
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "0.0.0.0:15432:5432"
+    volumes:
+      - postgres_vol:/var/lib/postgresql/data
+      - ${PWD}/fs/volumes/postgres/import:/import:Z
+      - ${PWD}/fs/volumes/postgres/etc/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf:Z
+
+  clickhouse:
+    image: "clickhouse/clickhouse-server:latest"
+    user: "0:0"
+    hostname: clickhouse-host
+    networks:
+      - net
+    volumes:
+      - clickhouse_vol:/var/lib/clickhouse
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
+    ports:
+      - "0.0.0.0:18123:8123"
+      - "0.0.0.0:19000:9000"
+
+volumes:
+  postgres_vol:
+    driver: local
+  clickhouse_vol:
+    driver: local
+
+networks:
+  net:
+    driver: bridge
