@@ -3,6 +3,7 @@ version: "3.8"
 services:
   postgres-src:
     image: postgres:latest
+    command: -c config_file=/etc/postgresql/postgresql.conf
     restart: always
     hostname: src-pg
     environment:
@@ -13,7 +14,7 @@ services:
     volumes:
       - src_db:/var/lib/postgresql/data
       - ${PWD}/fs/volumes/postgres/import:/import:Z
-      - ${PWD}/fs/volumes/postgres/data/postgresql.conf:/var/lib/postgresql/data/postgresql.conf:Z
+      - ${PWD}/fs/volumes/postgres/etc/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf:Z
 
   clickhouse-dst:
     image: "clickhouse/clickhouse-server:latest"
