@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  clickhouse:
+    image: "clickhouse/clickhouse-server:latest"
+    user: "0:0"
+    hostname: clickhouse
+    volumes:
+      - clickhouse_vol:/var/lib/clickhouse
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
+    ports:
+      - "0.0.0.0:18123:8123"
+      - "0.0.0.0:19000:9000"
+
+volumes:
+  clickhouse_vol:
+    driver: local
