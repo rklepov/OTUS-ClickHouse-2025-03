@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  superset:
+    image: apache/superset:latest
+    restart: always
+    hostname: superset
+    networks:
+      - net
+    volumes:
+      - superset_home:/app/superset_home
+    environment:
+      - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
+    ports:
+      - "0.0.0.0:8080:8088"
+
+  clickhouse:
+    image: "clickhouse/clickhouse-server:latest"
+    user: "0:0"
+    hostname: clickhouse
+    networks:
+      - net
+    volumes:
+      - clickhouse_vol:/var/lib/clickhouse
+      - ${PWD}/fs/volumes/import:/import:Z
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
+    ports:
+      - "0.0.0.0:18123:8123"
+      - "0.0.0.0:19000:9000"
+
+volumes:
+  superset_home:
+  clickhouse_vol:
+
+networks:
+  net:
+    driver: bridge
