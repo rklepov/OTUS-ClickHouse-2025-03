@@ -8,6 +8,7 @@ services:
     hostname: clickhouse-01
     volumes:
       - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-server/config.d/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:Z
       - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
     ports:
       - "0.0.0.0:18123:8123"
@@ -25,6 +26,7 @@ services:
     hostname: clickhouse-02
     volumes:
       - ${PWD}/fs/volumes/clickhouse-02/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-01/etc/clickhouse-server/config.d/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:Z
       - ${PWD}/fs/volumes/clickhouse-02/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml:Z
     ports:
       - "0.0.0.0:28123:8123"
