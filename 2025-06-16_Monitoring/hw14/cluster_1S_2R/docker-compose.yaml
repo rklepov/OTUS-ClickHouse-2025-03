@@ -1,4 +1,5 @@
-version: '3.8'
+version: "3.8"
+
 services:
   clickhouse-01:
     image: "clickhouse/clickhouse-server:${CHVER:-latest}"
@@ -11,6 +12,8 @@ services:
     ports:
       - "0.0.0.0:18123:8123"
       - "0.0.0.0:19000:9000"
+    networks:
+      - hw14_monitoring
     depends_on:
       - clickhouse-keeper-01
       - clickhouse-keeper-02
@@ -26,6 +29,8 @@ services:
     ports:
       - "0.0.0.0:28123:8123"
       - "0.0.0.0:29000:9000"
+    networks:
+      - hw14_monitoring
     depends_on:
       - clickhouse-keeper-01
       - clickhouse-keeper-02
@@ -36,24 +41,92 @@ services:
     container_name: clickhouse-keeper-01
     hostname: clickhouse-keeper-01
     volumes:
-     - ${PWD}/fs/volumes/clickhouse-keeper-01/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-keeper-01/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml:Z
     ports:
-        - "0.0.0.0:19181:9181"
+      - "0.0.0.0:19181:9181"
+    networks:
+      - hw14_monitoring
   clickhouse-keeper-02:
     image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
     user: "0:0"
     container_name: clickhouse-keeper-02
     hostname: clickhouse-keeper-02
     volumes:
-     - ${PWD}/fs/volumes/clickhouse-keeper-02/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-keeper-02/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml:Z
     ports:
-        - "0.0.0.0:29181:9181"
+      - "0.0.0.0:29181:9181"
+    networks:
+      - hw14_monitoring
   clickhouse-keeper-03:
     image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
     user: "0:0"
     container_name: clickhouse-keeper-03
     hostname: clickhouse-keeper-03
     volumes:
-     - ${PWD}/fs/volumes/clickhouse-keeper-03/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml:Z
+      - ${PWD}/fs/volumes/clickhouse-keeper-03/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml:Z
     ports:
-        - "0.0.0.0:39181:9181"
+      - "0.0.0.0:39181:9181"
+    networks:
+      - hw14_monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ${PWD}/fs/volumes/prometheus:/etc/prometheus:Z
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    ports:
+      - "19090:9090"
+    networks:
+      - hw14_monitoring
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)"
+    ports:
+      - "19100:9100"
+    networks:
+      - hw14_monitoring
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ${PWD}/fs/volumes/grafana/provisioning:/etc/grafana/provisioning:Z
+      - ${PWD}/fs/volumes/grafana/dashboards:/var/lib/grafana/dashboards:Z
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "13000:3000"
+    networks:
+      - hw14_monitoring
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
+networks:
+  hw14_monitoring:
+    driver: bridge
