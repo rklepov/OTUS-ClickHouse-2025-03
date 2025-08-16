@@ -1,2 +1,21 @@
-# OTUS-ClickHouse-2025-03
-https://otus.ru/lessons/clickhouse
+# [*ClickHouse* для инженеров и архитекторов БД](https://otus.ru/lessons/clickhouse/)
+
+1. [Адаптация ClickHouse](2025-04-07_Overview/hw01/HW01.md)
+1. [Установка ClickHouse](2025-04-09_Install/hw02/HW02.md)
+1. [Работа с SQL в ClickHouse](2025-04-16_SQL/hw03/HW03.md)
+1. [Обработка данных](2025-04-21_Functions/hw04/HW04.md)
+1. [Движки MergeTree](2025-04-23_MergeTree/hw05/HW05.md)
+1. [Джоины и агрегации](2025-05-05_Joins/hw06/HW06.md)
+1. [Словари](2025-05-07_Dictionaries/hw07/HW07.md)
+1. [Проекции и материализованные представления](2025-05-14_Projections/hw08/HW08.md)
+1. [Репликация и удаление](2025-05-19_Replication/hw09/HW09.md)
+1. [Шардирование](2025-05-21_Sharding/hw10/HW10.md  )
+1. [Мутации данных и манипуляции с партициями](2025-05-26_Partitions/hw11/HW11.md)
+1. [Контроль доступа](2025-06-09_RBAC/hw12/HW12.md)
+1. [Storage Policy и резервное копирование](2025-06-11_StoragePolicy/hw13/HW13.md)
+1. [Мониторинг](2025-06-16_Monitoring/hw14/HW14.md)
+1. [Профилирование запросов](2025-06-18_Profiling/hw15/HW15.md)
+1. [Загрузка данных в ClickHouse](2025-06-25_DI/hw16/HW16.md)
+1. [Интеграция с Apache Kafka](2025-06-30_Kafka/hw17/HW17.md)
+1. [Визуализация данных](2025-07-02_BI/hw18/HW18.md)
+1. [Интеграция ClickHouse с PostgreSQL](2025-07-07_PG/hw19/HW19.md)
